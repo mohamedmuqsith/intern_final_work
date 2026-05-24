@@ -24,28 +24,31 @@
 }
 
 .navbar-logo {
-  display: flex;
-  align-items: center;
-  gap: 0.6rem;
-  font-size: var(--font-size-xl);
+  font-size: 1.5rem;
   font-weight: 800;
-  color: var(--neutral-900);
+  color: var(--primary-700);
+  text-decoration: none;
+  letter-spacing: -0.02em;
 }
 
-.logo-icon {
-  display: flex;
+.btn-outline-gray {
+  background: transparent;
+  color: var(--neutral-700);
+  border: 1px solid var(--neutral-300);
+  padding: 0.65rem 1.25rem;
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  border-radius: var(--radius-md);
+  transition: all var(--transition-fast);
+  display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 40px;
-  height: 40px;
-  background: linear-gradient(135deg, var(--primary-600), var(--primary-700));
-  color: white;
-  border-radius: var(--radius-lg);
-  font-size: 1.1rem;
 }
 
-.logo-accent {
-  color: var(--primary-600);
+.btn-outline-gray:hover {
+  background: var(--neutral-50);
+  border-color: var(--neutral-400);
+  color: var(--neutral-900);
 }
 
 .navbar-links {
