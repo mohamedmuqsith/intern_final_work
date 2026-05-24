@@ -57,7 +57,7 @@ function Home() {
 
       <section className="features-section section" id="features-section">
         <div className="container">
-          <div className="section-header"><h2 className="section-title">Why Choose AutoCare Pro?</h2><p className="section-subtitle">Cutting-edge technology meets expert craftsmanship.</p></div>
+          <div className="section-header"><h2 className="section-title">Why Choose AutoServe Pro?</h2><p className="section-subtitle">Cutting-edge technology meets expert craftsmanship.</p></div>
           <div className="features-grid">
             {features.map((f,i)=>(<div className="feature-card card" key={i}><div className="card-body"><div className="feature-icon">{f.icon}</div><h3 className="feature-title">{f.title}</h3><p className="feature-desc">{f.desc}</p></div></div>))}
           </div>
@@ -75,7 +75,7 @@ function Home() {
       </section>
 
       <section className="cta-section" id="cta-section">
-        <div className="container"><div className="cta-card"><h2 className="cta-title">Ready to Book Your Service?</h2><p className="cta-text">Join thousands of satisfied customers who trust AutoCare Pro.</p><Link to="/services" className="btn btn-accent btn-lg" id="cta-book-btn">Book Now <FiArrowRight /></Link></div></div>
+        <div className="container"><div className="cta-card"><h2 className="cta-title">Ready to Book Your Service?</h2><p className="cta-text">Join thousands of satisfied customers who trust AutoServe Pro.</p><Link to="/services" className="btn btn-accent btn-lg" id="cta-book-btn">Book Now <FiArrowRight /></Link></div></div>
       </section>
     </div>
   );

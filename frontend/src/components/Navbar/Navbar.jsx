@@ -32,7 +32,7 @@ function Navbar() {
             <FaCar />
           </div>
           <span className="logo-text">
-            Auto<span className="logo-accent">Care</span> Pro
+            Auto<span className="logo-accent">Serve</span> Pro
           </span>
         </Link>
 

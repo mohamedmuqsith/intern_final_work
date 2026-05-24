@@ -33,7 +33,7 @@ function Register() {
     <div className="auth-page">
       <div className="auth-container">
         <div className="auth-visual">
-          <div className="auth-visual-content"><FaCar size={56}/><h2>Join AutoCare Pro</h2><p>Create an account to book services, track appointments, and get exclusive offers.</p></div>
+          <div className="auth-visual-content"><FaCar size={56}/><h2>Join AutoServe Pro</h2><p>Create an account to book services, track appointments, and get exclusive offers.</p></div>
         </div>
         <div className="auth-form-section">
           <form className="auth-form" onSubmit={handleSubmit} id="register-form">

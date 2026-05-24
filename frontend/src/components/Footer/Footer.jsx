@@ -16,7 +16,7 @@ function Footer() {
           <div className="footer-brand">
             <Link to="/" className="footer-logo">
               <div className="footer-logo-icon"><FaCar /></div>
-              <span>Auto<span className="logo-accent">Care</span> Pro</span>
+              <span>Auto<span className="logo-accent">Serve</span> Pro</span>
             </Link>
             <p className="footer-description">
               Professional vehicle service booking platform. Schedule your appointments online and keep your vehicle in top condition.
@@ -51,13 +51,13 @@ function Footer() {
             </div>
             <div className="footer-contact">
               <FiMail size={14} />
-              <span>info@autocarepro.lk</span>
+              <span>info@autoservepro.lk</span>
             </div>
           </div>
         </div>
 
         <div className="footer-bottom">
-          <p>&copy; {new Date().getFullYear()} AutoCare Pro. All rights reserved.</p>
+          <p>&copy; {new Date().getFullYear()} AutoServe Pro. All rights reserved.</p>
         </div>
       </div>
     </footer>
