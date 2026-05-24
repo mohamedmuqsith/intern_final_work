@@ -1,0 +1,250 @@
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: var(--navbar-height);
+  z-index: 1000;
+  transition: all var(--transition-base);
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+}
+
+.navbar-scrolled {
+  background: rgba(255, 255, 255, 0.95);
+  box-shadow: 0 1px 20px rgba(0, 0, 0, 0.08);
+}
+
+.navbar-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 100%;
+}
+
+.navbar-logo {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: var(--font-size-xl);
+  font-weight: 800;
+  color: var(--neutral-900);
+}
+
+.logo-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  background: linear-gradient(135deg, var(--primary-600), var(--primary-700));
+  color: white;
+  border-radius: var(--radius-lg);
+  font-size: 1.1rem;
+}
+
+.logo-accent {
+  color: var(--primary-600);
+}
+
+.navbar-links {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.nav-link {
+  padding: 0.5rem 1rem;
+  font-size: var(--font-size-sm);
+  font-weight: 500;
+  color: var(--neutral-600);
+  border-radius: var(--radius-md);
+  transition: all var(--transition-fast);
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.nav-link:hover {
+  color: var(--primary-600);
+  background: var(--primary-50);
+}
+
+.nav-link.active {
+  color: var(--primary-700);
+  background: var(--primary-50);
+  font-weight: 600;
+}
+
+.nav-link-admin {
+  color: var(--accent-600);
+}
+
+.nav-link-admin:hover,
+.nav-link-admin.active {
+  color: var(--accent-700);
+  background: var(--accent-50);
+}
+
+.navbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.auth-buttons {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.profile-dropdown {
+  position: relative;
+}
+
+.profile-trigger {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.35rem 0.75rem 0.35rem 0.35rem;
+  background: var(--neutral-100);
+  border-radius: var(--radius-full);
+  border: 1.5px solid var(--neutral-200);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.profile-trigger:hover {
+  background: var(--neutral-200);
+  border-color: var(--neutral-300);
+}
+
+.profile-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--primary-500), var(--primary-700));
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--font-size-sm);
+  font-weight: 700;
+}
+
+.profile-name {
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  color: var(--neutral-700);
+}
+
+.profile-menu {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  min-width: 220px;
+  background: white;
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-xl);
+  border: 1px solid var(--neutral-200);
+  overflow: hidden;
+  animation: fadeIn 0.2s ease;
+  z-index: 100;
+}
+
+.profile-menu-header {
+  padding: 1rem;
+  border-bottom: 1px solid var(--neutral-100);
+}
+
+.profile-menu-name {
+  font-weight: 600;
+  color: var(--neutral-800);
+  font-size: var(--font-size-sm);
+}
+
+.profile-menu-email {
+  font-size: var(--font-size-xs);
+  color: var(--neutral-500);
+  margin-top: 2px;
+}
+
+.profile-menu-divider {
+  height: 1px;
+  background: var(--neutral-100);
+}
+
+.profile-menu-item {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.7rem 1rem;
+  font-size: var(--font-size-sm);
+  color: var(--neutral-600);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  width: 100%;
+  background: none;
+  border: none;
+  text-align: left;
+  font-family: var(--font-family);
+}
+
+.profile-menu-item:hover {
+  background: var(--neutral-50);
+  color: var(--neutral-800);
+}
+
+.profile-menu-item.logout {
+  color: var(--error-500);
+}
+
+.profile-menu-item.logout:hover {
+  background: var(--error-50);
+  color: var(--error-600);
+}
+
+.mobile-toggle {
+  display: none;
+  background: none;
+  color: var(--neutral-700);
+  padding: 0.5rem;
+}
+
+@media (max-width: 768px) {
+  .navbar-links {
+    display: none;
+    position: absolute;
+    top: var(--navbar-height);
+    left: 0;
+    right: 0;
+    flex-direction: column;
+    background: white;
+    padding: 1rem;
+    box-shadow: var(--shadow-lg);
+    border-bottom: 1px solid var(--neutral-200);
+    gap: 0.25rem;
+  }
+
+  .navbar-links.active {
+    display: flex;
+  }
+
+  .nav-link {
+    width: 100%;
+    padding: 0.75rem 1rem;
+  }
+
+  .mobile-toggle {
+    display: flex;
+  }
+
+  .auth-buttons {
+    display: none;
+  }
+
+  .profile-name {
+    display: none;
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "name": "vehicle-service-booking-stack",
+  "version": "1.0.0",
+  "description": "Root package for running fullstack MERN Vehicle Service Booking System",
+  "type": "module",
+  "scripts": {
+    "install-all": "npm install && npm install --prefix backend && npm install --prefix frontend",
+    "dev-backend": "npm run dev --prefix backend",
+    "dev-frontend": "npm run dev --prefix frontend",
+    "dev": "npx concurrently \"npm run dev-backend\" \"npm run dev-frontend\""
+  },
+  "devDependencies": {
+    "concurrently": "^9.0.1"
+  }
+}

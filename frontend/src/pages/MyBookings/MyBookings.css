@@ -1,0 +1,15 @@
+.bookings-hero { background: linear-gradient(135deg, var(--primary-700), var(--primary-900)); padding: 3rem 0; text-align: center; }
+.bookings-list { display: flex; flex-direction: column; gap: 1rem; }
+.booking-card-body { display: flex; align-items: center; justify-content: space-between; gap: 1.5rem; }
+.booking-header { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.5rem; }
+.booking-header h3 { font-size: var(--font-size-lg); font-weight: 700; }
+.booking-meta { display: flex; gap: 1.5rem; font-size: var(--font-size-sm); color: var(--neutral-500); margin-bottom: 0.4rem; }
+.booking-meta span { display: flex; align-items: center; gap: 0.3rem; }
+.booking-vehicle { font-size: var(--font-size-sm); color: var(--neutral-600); font-weight: 500; }
+.booking-notes { font-size: var(--font-size-sm); color: var(--neutral-400); font-style: italic; margin-top: 0.3rem; }
+.cancel-btn { color: var(--error-500) !important; flex-shrink: 0; }
+.cancel-btn:hover { background: var(--error-50) !important; }
+.empty-state { text-align: center; padding: 4rem; color: var(--neutral-400); }
+.empty-state h3 { font-size: var(--font-size-xl); color: var(--neutral-600); margin: 1rem 0 0.5rem; }
+.loading-msg { text-align: center; padding: 3rem; color: var(--neutral-400); }
+@media (max-width: 768px) { .booking-card-body { flex-direction: column; align-items: flex-start; } }

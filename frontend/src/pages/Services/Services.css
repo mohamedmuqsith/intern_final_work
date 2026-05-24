@@ -1,0 +1,22 @@
+.services-hero { background: linear-gradient(135deg, var(--primary-700), var(--primary-900)); padding: 3rem 0; text-align: center; }
+.page-title { font-size: var(--font-size-4xl); font-weight: 800; color: white; margin-bottom: 0.5rem; }
+.page-subtitle { font-size: var(--font-size-lg); color: var(--primary-200); }
+.services-filters { display: flex; gap: 1rem; align-items: center; flex-wrap: wrap; margin-bottom: 2rem; }
+.search-box { display: flex; align-items: center; gap: 0.5rem; background: white; border: 1.5px solid var(--neutral-200); border-radius: var(--radius-lg); padding: 0 1rem; flex: 1; min-width: 250px; }
+.search-box input { border: none; padding: 0.75rem 0; }
+.search-box input:focus { box-shadow: none; }
+.category-tabs { display: flex; gap: 0.4rem; flex-wrap: wrap; }
+.cat-tab { padding: 0.5rem 1rem; border-radius: var(--radius-full); font-size: var(--font-size-sm); font-weight: 500; background: var(--neutral-100); color: var(--neutral-600); border: none; cursor: pointer; transition: all var(--transition-fast); }
+.cat-tab.active, .cat-tab:hover { background: var(--primary-600); color: white; }
+.services-list { display: flex; flex-direction: column; gap: 1rem; }
+.service-card-body { display: flex; align-items: center; gap: 1.5rem; }
+.service-card-icon { width: 64px; height: 64px; border-radius: var(--radius-xl); background: linear-gradient(135deg, var(--primary-50), var(--primary-100)); color: var(--primary-600); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.service-card-info { flex: 1; }
+.service-card-header { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.4rem; }
+.service-card-header h3 { font-size: var(--font-size-lg); font-weight: 700; }
+.service-card-desc { font-size: var(--font-size-sm); color: var(--neutral-500); margin-bottom: 0.5rem; }
+.service-card-meta { display: flex; gap: 1.5rem; }
+.service-card-price { font-weight: 700; color: var(--primary-600); }
+.service-card-duration { font-size: var(--font-size-sm); color: var(--neutral-400); }
+.no-results { text-align: center; padding: 3rem; color: var(--neutral-400); }
+@media (max-width: 768px) { .service-card-body { flex-direction: column; text-align: center; } .service-card-meta { justify-content: center; } .service-card-header { justify-content: center; } }
