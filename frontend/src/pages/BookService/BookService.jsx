@@ -1,9 +1,7 @@
 import { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
 import { getAllServices, createBooking } from '../../services/api.js';
-import { useAuth } from '../../context/AuthContext.jsx';
 import { toast } from 'react-toastify';
-import { FiCalendar, FiClock, FiMessageSquare, FiUser, FiPhone, FiTag, FiFileText, FiChevronDown, FiChevronUp } from 'react-icons/fi';
+import { FiCalendar, FiClock, FiUser, FiPhone, FiTag, FiChevronDown, FiChevronUp, FiCheckCircle } from 'react-icons/fi';
 import { FaCar, FaOilCan, FaCogs, FaWrench, FaBatteryFull } from 'react-icons/fa';
 import bookingImage from '../../assets/customer_booking_image.jpg';
 import './BookService.css';
@@ -38,7 +36,7 @@ const faqs = [
   },
   {
     q: "Can I reschedule my appointment?",
-    a: "Yes, you can easily reschedule or cancel your appointment through the 'My Bookings' panel up to 2 hours before the scheduled time."
+    a: "Yes, you can easily reschedule or cancel your appointment by contacting our support team."
   },
   {
     q: "Do you offer a warranty on engine repairs?",
@@ -51,71 +49,53 @@ const faqs = [
 ];
 
 function BookService() {
-  const { serviceId } = useParams();
-  const { user } = useAuth();
-  const navigate = useNavigate();
-
   const [loading, setLoading] = useState(false);
   const [services, setServices] = useState([]);
   const [activeFaq, setActiveFaq] = useState(null);
+  const [bookingSuccess, setBookingSuccess] = useState(false);
+  const [submittedBooking, setSubmittedBooking] = useState(null);
 
   const [form, setForm] = useState({
-    customerName: user?.name || '',
-    phone: user?.phone || '',
-    licensePlate: '',
-    vehicleType: 'Sedan',
-    serviceId: '',
+    customerName: '',
+    phone: '',
+    vehicleNumber: '',
+    serviceType: '',
     date: '',
-    time: '',
-    notes: ''
+    time: ''
   });
 
-  // Fetch all services dynamically
+  // Fetch all services dynamically from database
   useEffect(() => {
     getAllServices()
       .then((res) => {
         if (res.data?.length) {
           setServices(res.data);
-          
-          // Preselect matching service from URL params
-          const matched = res.data.find(s => s._id === serviceId);
-          if (matched) {
-            setForm(prev => ({ ...prev, serviceId: matched._id }));
-          } else {
-            // Default to first service
-            setForm(prev => ({ ...prev, serviceId: res.data[0]._id }));
-          }
+          // Default to first service name
+          setForm(prev => ({ ...prev, serviceType: res.data[0].name }));
         }
       })
       .catch(() => {
         toast.error('Failed to load services. Please refresh.');
       });
-  }, [serviceId]);
-
-  // Sync user info if loaded late
-  useEffect(() => {
-    if (user) {
-      setForm(prev => ({
-        ...prev,
-        customerName: user.name || '',
-        phone: user.phone || ''
-      }));
-    }
-  }, [user]);
+  }, []);
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
   const handleSelectService = (serviceName) => {
+    // Find exact or partial match from DB services
     const found = services.find(s => s.name.toLowerCase().includes(serviceName.toLowerCase()));
     if (found) {
-      setForm(prev => ({ ...prev, serviceId: found._id }));
+      setForm(prev => ({ ...prev, serviceType: found.name }));
       const formEl = document.getElementById('booking-form-card');
       if (formEl) {
         formEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
       }
       toast.info(`Selected service: ${found.name}`);
+    } else {
+      // If no DB match, set it directly
+      setForm(prev => ({ ...prev, serviceType: serviceName }));
     }
   };
 
@@ -125,32 +105,42 @@ function BookService() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!form.serviceId || !form.vehicleType || !form.date || !form.time) {
+    if (!form.customerName || !form.phone || !form.vehicleNumber || !form.serviceType || !form.date || !form.time) {
       toast.error('Please fill in all required fields');
       return;
     }
 
     setLoading(true);
     try {
-      // Pass the complete form data including optional fields for backend schema compatibility
-      await createBooking({
-        serviceId: form.serviceId,
-        vehicleType: form.vehicleType,
-        vehicleMake: '',
-        vehicleModel: '',
-        vehicleYear: '',
-        licensePlate: form.licensePlate,
+      const res = await createBooking({
+        customerName: form.customerName,
+        phone: form.phone,
+        vehicleNumber: form.vehicleNumber,
+        serviceType: form.serviceType,
         date: form.date,
-        time: form.time,
-        notes: form.notes
+        time: form.time
       });
       toast.success('Booking confirmed successfully!');
-      navigate('/my-bookings');
+      setSubmittedBooking(res.data);
+      setBookingSuccess(true);
     } catch (err) {
       toast.error(err.response?.data?.message || 'Failed to create booking');
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleNewBooking = () => {
+    setBookingSuccess(false);
+    setSubmittedBooking(null);
+    setForm({
+      customerName: '',
+      phone: '',
+      vehicleNumber: '',
+      serviceType: services.length > 0 ? services[0].name : '',
+      date: '',
+      time: ''
+    });
   };
 
   return (
@@ -178,155 +168,170 @@ function BookService() {
       {/* Floating Booking Form Card */}
       <div className="container form-overlap-container">
         <div className="booking-form-card" id="booking-form-card">
-          <div className="booking-form-header">
-            <h2 className="booking-form-title">Service Schedule Form</h2>
-            <p className="booking-form-subtitle">Fill in your details below to secure your appointment.</p>
-          </div>
-          <form className="booking-actual-form" onSubmit={handleSubmit}>
-            <div className="booking-form-grid">
-              
-              {/* Row 1 */}
-              <div className="form-group-v2">
-                <label className="label-v2"><FiUser className="input-icon" /> CUSTOMER NAME</label>
-                <input 
-                  type="text" 
-                  name="customerName"
-                  value={form.customerName}
-                  onChange={handleChange}
-                  placeholder="John Doe"
-                  className="input-v2"
-                  required
-                />
+          {bookingSuccess ? (
+            /* ===== SUCCESS CONFIRMATION ===== */
+            <div className="booking-success">
+              <div className="success-icon-wrapper">
+                <FiCheckCircle size={64} />
               </div>
-
-              <div className="form-group-v2">
-                <label className="label-v2"><FiPhone className="input-icon" /> PHONE NUMBER</label>
-                <input 
-                  type="text" 
-                  name="phone"
-                  value={form.phone}
-                  onChange={handleChange}
-                  placeholder="+1 (555) 000-0000"
-                  className="input-v2"
-                  required
-                />
-              </div>
-
-              <div className="form-group-v2">
-                <label className="label-v2"><FiTag className="input-icon" /> VEHICLE NUMBER</label>
-                <input 
-                  type="text" 
-                  name="licensePlate"
-                  value={form.licensePlate}
-                  onChange={handleChange}
-                  placeholder="ABC-1234"
-                  className="input-v2"
-                  required
-                />
-              </div>
-
-              {/* Row 2 */}
-              <div className="form-group-v2">
-                <label className="label-v2"><FaCar className="input-icon" /> VEHICLE TYPE</label>
-                <div className="select-wrapper-v2">
-                  <select 
-                    name="vehicleType" 
-                    value={form.vehicleType}
-                    onChange={handleChange}
-                    className="select-v2"
-                  >
-                    <option value="Sedan">Sedan</option>
-                    <option value="SUV">SUV</option>
-                    <option value="Truck">Truck</option>
-                    <option value="Van">Van</option>
-                    <option value="Motorcycle">Motorcycle</option>
-                  </select>
-                  <FiChevronDown className="select-arrow-icon" />
+              <h2 className="success-title">Booking Confirmed!</h2>
+              <p className="success-subtitle">Your appointment has been scheduled successfully.</p>
+              <div className="success-details">
+                <div className="success-row">
+                  <span className="success-label">Customer</span>
+                  <span className="success-value">{submittedBooking?.customerName}</span>
+                </div>
+                <div className="success-row">
+                  <span className="success-label">Phone</span>
+                  <span className="success-value">{submittedBooking?.phone}</span>
+                </div>
+                <div className="success-row">
+                  <span className="success-label">Vehicle Number</span>
+                  <span className="success-value">{submittedBooking?.vehicleNumber}</span>
+                </div>
+                <div className="success-row">
+                  <span className="success-label">Service</span>
+                  <span className="success-value">{submittedBooking?.serviceType}</span>
+                </div>
+                <div className="success-row">
+                  <span className="success-label">Date & Time</span>
+                  <span className="success-value">{submittedBooking?.date} at {submittedBooking?.time}</span>
+                </div>
+                <div className="success-row">
+                  <span className="success-label">Status</span>
+                  <span className="success-status-badge">{submittedBooking?.status}</span>
                 </div>
               </div>
-
-              <div className="form-group-v2">
-                <label className="label-v2"><FaWrench className="input-icon" /> SERVICE TYPE</label>
-                <div className="select-wrapper-v2">
-                  <select 
-                    name="serviceId" 
-                    value={form.serviceId}
-                    onChange={handleChange}
-                    className="select-v2"
-                    required
-                  >
-                    {services.length === 0 ? (
-                      <option value="">Loading services...</option>
-                    ) : (
-                      services.map(s => (
-                        <option key={s._id} value={s._id}>
-                          {s.name} - LKR {s.price?.toLocaleString()}
-                        </option>
-                      ))
-                    )}
-                  </select>
-                  <FiChevronDown className="select-arrow-icon" />
-                </div>
+              <button className="confirm-booking-btn-v2" onClick={handleNewBooking}>
+                Book Another Service
+              </button>
+            </div>
+          ) : (
+            /* ===== BOOKING FORM ===== */
+            <>
+              <div className="booking-form-header">
+                <h2 className="booking-form-title">Service Schedule Form</h2>
+                <p className="booking-form-subtitle">Fill in your details below to secure your appointment.</p>
               </div>
-
-              <div className="form-group-v2">
-                <label className="label-v2"><FiCalendar className="input-icon" /> DATE/TIME</label>
-                <div className="datetime-split">
-                  <input 
-                    type="date" 
-                    name="date"
-                    value={form.date}
-                    onChange={handleChange}
-                    min={new Date().toISOString().split('T')[0]}
-                    className="input-v2 date-input-v2"
-                    required
-                  />
-                  <div className="select-wrapper-v2 time-select-v2">
-                    <select 
-                      name="time"
-                      value={form.time}
+              <form className="booking-actual-form" onSubmit={handleSubmit}>
+                <div className="booking-form-grid">
+                  
+                  {/* Row 1 */}
+                  <div className="form-group-v2">
+                    <label className="label-v2"><FiUser className="input-icon" /> CUSTOMER NAME</label>
+                    <input 
+                      type="text" 
+                      name="customerName"
+                      value={form.customerName}
                       onChange={handleChange}
-                      className="select-v2"
+                      placeholder="John Doe"
+                      className="input-v2"
                       required
-                    >
-                      <option value="">--:-- --</option>
-                      <option value="08:00 AM">08:00 AM</option>
-                      <option value="09:00 AM">09:00 AM</option>
-                      <option value="10:00 AM">10:00 AM</option>
-                      <option value="11:00 AM">11:00 AM</option>
-                      <option value="01:00 PM">01:00 PM</option>
-                      <option value="02:00 PM">02:00 PM</option>
-                      <option value="03:00 PM">03:00 PM</option>
-                      <option value="04:00 PM">04:00 PM</option>
-                    </select>
-                    <FiChevronDown className="select-arrow-icon" />
+                    />
+                  </div>
+
+                  <div className="form-group-v2">
+                    <label className="label-v2"><FiPhone className="input-icon" /> PHONE NUMBER</label>
+                    <input 
+                      type="text" 
+                      name="phone"
+                      value={form.phone}
+                      onChange={handleChange}
+                      placeholder="+94 7X XXX XXXX"
+                      className="input-v2"
+                      required
+                    />
+                  </div>
+
+                  <div className="form-group-v2">
+                    <label className="label-v2"><FiTag className="input-icon" /> VEHICLE NUMBER</label>
+                    <input 
+                      type="text" 
+                      name="vehicleNumber"
+                      value={form.vehicleNumber}
+                      onChange={handleChange}
+                      placeholder="ABC-1234"
+                      className="input-v2"
+                      required
+                    />
+                  </div>
+
+                  {/* Row 2 */}
+                  <div className="form-group-v2">
+                    <label className="label-v2"><FaWrench className="input-icon" /> SERVICE TYPE</label>
+                    <div className="select-wrapper-v2">
+                      <select 
+                        name="serviceType" 
+                        value={form.serviceType}
+                        onChange={handleChange}
+                        className="select-v2"
+                        required
+                      >
+                        {services.length === 0 ? (
+                          <option value="">Loading services...</option>
+                        ) : (
+                          services.map(s => (
+                            <option key={s._id} value={s.name}>
+                              {s.name}
+                            </option>
+                          ))
+                        )}
+                      </select>
+                      <FiChevronDown className="select-arrow-icon" />
+                    </div>
+                  </div>
+
+                  <div className="form-group-v2">
+                    <label className="label-v2"><FiCalendar className="input-icon" /> DATE</label>
+                    <input 
+                      type="date" 
+                      name="date"
+                      value={form.date}
+                      onChange={handleChange}
+                      min={new Date().toISOString().split('T')[0]}
+                      className="input-v2 date-input-v2"
+                      required
+                    />
+                  </div>
+
+                  <div className="form-group-v2">
+                    <label className="label-v2"><FiClock className="input-icon" /> TIME</label>
+                    <div className="select-wrapper-v2">
+                      <select 
+                        name="time"
+                        value={form.time}
+                        onChange={handleChange}
+                        className="select-v2"
+                        required
+                      >
+                        <option value="">--:-- --</option>
+                        <option value="08:00 AM">08:00 AM</option>
+                        <option value="09:00 AM">09:00 AM</option>
+                        <option value="10:00 AM">10:00 AM</option>
+                        <option value="11:00 AM">11:00 AM</option>
+                        <option value="12:00 PM">12:00 PM</option>
+                        <option value="01:00 PM">01:00 PM</option>
+                        <option value="02:00 PM">02:00 PM</option>
+                        <option value="03:00 PM">03:00 PM</option>
+                        <option value="04:00 PM">04:00 PM</option>
+                        <option value="05:00 PM">05:00 PM</option>
+                      </select>
+                      <FiChevronDown className="select-arrow-icon" />
+                    </div>
                   </div>
                 </div>
-              </div>
-            </div>
 
-            {/* Row 3 - Notes */}
-            <div className="form-group-v2 full-width-notes">
-              <label className="label-v2"><FiFileText className="input-icon" /> NOTES</label>
-              <textarea 
-                name="notes"
-                value={form.notes}
-                onChange={handleChange}
-                placeholder="Any specific issues or instructions..."
-                className="textarea-v2"
-                rows={4}
-              />
-            </div>
-
-            {/* Submit Button */}
-            <button 
-              type="submit" 
-              className="confirm-booking-btn-v2" 
-              disabled={loading}
-            >
-              {loading ? 'Booking Appointment...' : 'Confirm Booking'}
-            </button>
-          </form>
+                {/* Submit Button */}
+                <button 
+                  type="submit" 
+                  className="confirm-booking-btn-v2" 
+                  disabled={loading}
+                >
+                  {loading ? 'Booking Appointment...' : 'Confirm Booking'}
+                </button>
+              </form>
+            </>
+          )}
         </div>
       </div>
 
@@ -364,7 +369,7 @@ function BookService() {
             <div className="testimonials-stack">
               {testimonials.map((t, idx) => (
                 <div key={idx} className="testimonial-card-v2">
-                  <p className="testimonial-text-v2">“{t.text}”</p>
+                  <p className="testimonial-text-v2">"{t.text}"</p>
                   <div className="testimonial-author-wrapper">
                     <div className="testimonial-avatar">
                       {t.initials}

@@ -36,15 +36,15 @@ function Navbar() {
           <NavLink to="/services" className="nav-link" id="nav-services" onClick={() => setMenuOpen(false)}>
             Services
           </NavLink>
-          <a href="#" className="nav-link" onClick={(e) => { e.preventDefault(); setMenuOpen(false); }}>
+          <NavLink to="/pricing" className="nav-link" id="nav-pricing" onClick={() => setMenuOpen(false)}>
             Pricing
-          </a>
-          <a href="#" className="nav-link" onClick={(e) => { e.preventDefault(); setMenuOpen(false); }}>
+          </NavLink>
+          <NavLink to="/locations" className="nav-link" id="nav-locations" onClick={() => setMenuOpen(false)}>
             Locations
-          </a>
-          <a href="#" className="nav-link" onClick={(e) => { e.preventDefault(); setMenuOpen(false); }}>
+          </NavLink>
+          <NavLink to="/support" className="nav-link" id="nav-support" onClick={() => setMenuOpen(false)}>
             Support
-          </a>
+          </NavLink>
           {user && !isAdmin && (
             <NavLink to="/my-bookings" className="nav-link" id="nav-bookings" onClick={() => setMenuOpen(false)}>
               My Bookings

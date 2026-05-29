@@ -1,19 +1,19 @@
 import mongoose from 'mongoose';
 
 const bookingSchema = new mongoose.Schema({
-  user: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
-  service: { type: mongoose.Schema.Types.ObjectId, ref: 'Service', required: true },
-  serviceName: { type: String, required: true },
-  vehicleType: { type: String, required: true },
-  vehicleMake: { type: String },
-  vehicleModel: { type: String },
-  vehicleYear: { type: String },
-  licensePlate: { type: String },
+  customerName: { type: String, required: true },
+  phone: { type: String, required: true },
+  vehicleNumber: { type: String, required: true },
+  serviceType: { type: String, required: true },
   date: { type: String, required: true },
   time: { type: String, required: true },
-  notes: { type: String },
-  status: { type: String, enum: ['pending', 'confirmed', 'completed', 'cancelled'], default: 'pending' }
-}, { timestamps: true });
+  status: { 
+    type: String, 
+    enum: ['Pending', 'Approved', 'Completed', 'Rejected'], 
+    default: 'Pending' 
+  },
+  createdAt: { type: Date, default: Date.now }
+});
 
 const Booking = mongoose.model('Booking', bookingSchema);
 export default Booking;

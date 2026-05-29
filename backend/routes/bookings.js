@@ -1,59 +1,25 @@
 import express from 'express';
-import mongoose from 'mongoose';
 import Booking from '../models/Booking.js';
-import Service from '../models/Service.js';
-import { protect } from '../middleware/auth.js';
 
 const router = express.Router();
 
-// Create booking
-router.post('/', protect, async (req, res) => {
-  const { serviceId, vehicleType, vehicleMake, vehicleModel, vehicleYear, licensePlate, date, time, notes } = req.body;
+// POST /api/bookings — Create booking (PUBLIC - no auth required for customers)
+router.post('/', async (req, res) => {
+  console.log("INCOMING BOOKING PAYLOAD:", req.body);
+  const { customerName, phone, vehicleNumber, serviceType, date, time } = req.body;
   try {
-    let finalServiceId = serviceId;
-    let serviceName = 'Unknown Service';
-
-    if (mongoose.Types.ObjectId.isValid(serviceId)) {
-      const service = await Service.findById(serviceId);
-      if (service) {
-        serviceName = service.name;
-      }
-    } else {
-      // Graceful fallback for mock service IDs '1' to '6'
-      const mockNameMap = {
-        '1': 'Oil Change',
-        '2': 'Engine Tune-Up',
-        '3': 'Brake Service',
-        '4': 'Full Inspection',
-        '5': 'Battery Replacement',
-        '6': 'AC Service'
-      };
-      const mappedName = mockNameMap[serviceId];
-      if (mappedName) {
-        const service = await Service.findOne({ name: mappedName });
-        if (service) {
-          finalServiceId = service._id;
-          serviceName = service.name;
-        } else {
-          return res.status(400).json({ message: 'Service category not initialized in database' });
-        }
-      } else {
-        return res.status(400).json({ message: 'Invalid Service ID format' });
-      }
+    if (!customerName || !phone || !vehicleNumber || !serviceType || !date || !time) {
+      console.log("REJECTED BOOKING. Missing fields.", {customerName, phone, vehicleNumber, serviceType, date, time});
+      return res.status(400).json({ message: 'All fields are required' });
     }
 
     const booking = await Booking.create({
-      user: req.user._id,
-      service: finalServiceId,
-      serviceName,
-      vehicleType,
-      vehicleMake,
-      vehicleModel,
-      vehicleYear,
-      licensePlate,
+      customerName,
+      phone,
+      vehicleNumber,
+      serviceType,
       date,
-      time,
-      notes
+      time
     });
 
     res.status(201).json(booking);
@@ -62,32 +28,59 @@ router.post('/', protect, async (req, res) => {
   }
 });
 
-
-// Get my bookings
-router.get('/my', protect, async (req, res) => {
+// GET /api/bookings — Get all bookings
+router.get('/', async (req, res) => {
   try {
-    const bookings = await Booking.find({ user: req.user._id }).sort({ createdAt: -1 });
+    const bookings = await Booking.find({}).sort({ createdAt: -1 });
     res.json(bookings);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 });
 
-// Cancel my booking
-router.put('/:id/cancel', protect, async (req, res) => {
+// GET /api/bookings/:id — Get a single booking
+router.get('/:id', async (req, res) => {
+  try {
+    const booking = await Booking.findById(req.params.id);
+    if (!booking) {
+      return res.status(404).json({ message: 'Booking not found' });
+    }
+    res.json(booking);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+// PUT /api/bookings/:id/status — Update booking status
+router.put('/:id/status', async (req, res) => {
   try {
     const booking = await Booking.findById(req.params.id);
     if (!booking) {
       return res.status(404).json({ message: 'Booking not found' });
     }
 
-    if (booking.user.toString() !== req.user._id.toString()) {
-      return res.status(403).json({ message: 'Not authorized to cancel this booking' });
+    const { status } = req.body;
+    if (!['Pending', 'Approved', 'Completed', 'Rejected'].includes(status)) {
+      return res.status(400).json({ message: 'Invalid status value' });
     }
 
-    booking.status = 'cancelled';
+    booking.status = status;
     await booking.save();
     res.json(booking);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+// DELETE /api/bookings/:id — Delete a booking
+router.delete('/:id', async (req, res) => {
+  try {
+    const booking = await Booking.findById(req.params.id);
+    if (!booking) {
+      return res.status(404).json({ message: 'Booking not found' });
+    }
+    await Booking.deleteOne({ _id: req.params.id });
+    res.json({ message: 'Booking deleted successfully' });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }

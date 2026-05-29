@@ -621,3 +621,83 @@
     margin-bottom: 2rem;
   }
 }
+
+/* ==========================================================================
+   6. Booking Success Confirmation
+   ========================================================================== */
+
+.booking-success {
+  text-align: center;
+  padding: 2rem 0;
+}
+
+.success-icon-wrapper {
+  color: #10b981;
+  margin-bottom: 1.5rem;
+  animation: scaleIn 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes scaleIn {
+  0% { transform: scale(0.5); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+.success-title {
+  font-size: 2rem;
+  font-weight: 800;
+  color: #0f172a;
+  margin-bottom: 0.5rem;
+}
+
+.success-subtitle {
+  font-size: 1.05rem;
+  color: #64748b;
+  margin-bottom: 2.5rem;
+}
+
+.success-details {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 1rem;
+  padding: 1.5rem 2rem;
+  max-width: 500px;
+  margin: 0 auto 2rem auto;
+  text-align: left;
+}
+
+.success-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem 0;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.success-row:last-child {
+  border-bottom: none;
+}
+
+.success-label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.success-value {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #0f172a;
+}
+
+.success-status-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.3rem 0.75rem;
+  border-radius: 1rem;
+  font-size: 0.8rem;
+  font-weight: 700;
+  background-color: #fef3c7;
+  color: #d97706;
+}

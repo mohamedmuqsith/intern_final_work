@@ -1,0 +1,358 @@
+.admin-settings-container {
+  padding: 24px 32px;
+  background-color: #f9fafc;
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Header */
+.settings-header {
+  margin-bottom: 32px;
+}
+
+.header-titles h2 {
+  font-size: 24px;
+  font-weight: 700;
+  color: #1e293b;
+  margin: 0 0 8px 0;
+}
+
+.header-titles p {
+  font-size: 14px;
+  color: #64748b;
+  margin: 0;
+}
+
+/* Grid Layout */
+.settings-main-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  flex: 1;
+}
+
+.settings-top-row {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 24px;
+}
+
+.settings-bottom-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+
+/* Card General */
+.settings-card {
+  background-color: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+}
+
+.card-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.card-header h3 {
+  font-size: 18px;
+  font-weight: 700;
+  color: #1e293b;
+  margin: 0;
+}
+
+.card-icon {
+  font-size: 20px;
+}
+
+.text-blue { color: #2563eb; }
+.text-red { color: #ef4444; }
+.text-gray { color: #64748b; }
+.text-gray-light { color: #94a3b8; }
+
+/* Forms */
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-group:last-child {
+  margin-bottom: 0;
+}
+
+.form-group label {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  color: #475569;
+  margin-bottom: 8px;
+}
+
+.form-group input, 
+.form-group textarea, 
+.form-group select {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  font-size: 14px;
+  color: #334155;
+  background-color: #f8fafc;
+  outline: none;
+  transition: all 0.2s;
+  font-family: inherit;
+}
+
+.form-group input:focus, 
+.form-group textarea:focus, 
+.form-group select:focus {
+  border-color: #3b82f6;
+  background-color: #ffffff;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+/* Profile Card specific */
+.profile-content {
+  display: flex;
+  gap: 32px;
+}
+
+.profile-image-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  width: 140px;
+}
+
+.profile-img {
+  width: 140px;
+  height: 140px;
+  border-radius: 12px;
+  object-fit: cover;
+  border: 1px solid #e2e8f0;
+}
+
+.btn-link {
+  background: none;
+  border: none;
+  color: #64748b;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.btn-link:hover {
+  text-decoration: underline;
+}
+
+.profile-form-section {
+  flex: 1;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+/* Security Card specific */
+.security-desc {
+  font-size: 13px;
+  color: #64748b;
+  margin: 0 0 20px 0;
+  line-height: 1.5;
+}
+
+.reset-2fa-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: #2563eb;
+  font-size: 13px;
+  font-weight: 600;
+  text-decoration: none;
+  margin-top: 16px;
+}
+
+.reset-2fa-link:hover {
+  text-decoration: underline;
+}
+
+/* Notifications */
+.notification-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.notification-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.notif-title {
+  display: block;
+  font-size: 14px;
+  font-weight: 600;
+  color: #1e293b;
+  margin-bottom: 2px;
+}
+
+.notif-desc {
+  display: block;
+  font-size: 12px;
+  color: #64748b;
+}
+
+.toggle-switch {
+  width: 44px;
+  height: 24px;
+  background-color: #cbd5e1;
+  border-radius: 12px;
+  position: relative;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.toggle-switch.active {
+  background-color: #1d4ed8;
+}
+
+.toggle-knob {
+  width: 20px;
+  height: 20px;
+  background-color: white;
+  border-radius: 50%;
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  transition: transform 0.2s;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+}
+
+.toggle-switch.active .toggle-knob {
+  transform: translateX(20px);
+}
+
+/* Appearance */
+.theme-options {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.theme-option {
+  flex: 1;
+  height: 80px;
+  border: 2px solid #e2e8f0;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  color: #475569;
+  transition: all 0.2s;
+  background-color: white;
+}
+
+.theme-option.dark-option {
+  background-color: #1e293b;
+  color: #94a3b8;
+  border-color: #1e293b;
+}
+
+.theme-option.selected {
+  border-color: #3b82f6;
+  background-color: #eff6ff;
+  color: #2563eb;
+}
+
+.theme-option.dark-option.selected {
+  border-color: #3b82f6;
+  background-color: #1e293b;
+}
+
+.theme-icon {
+  font-size: 24px;
+}
+
+.theme-desc {
+  text-align: center;
+  font-size: 12px;
+  color: #64748b;
+  margin: 0;
+}
+
+/* Bottom Actions */
+.settings-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 16px;
+  margin-top: 32px;
+  padding-top: 24px;
+  border-top: 1px solid #e2e8f0;
+}
+
+.btn-cancel {
+  background: none;
+  border: none;
+  color: #475569;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 10px 16px;
+}
+
+.btn-cancel:hover {
+  color: #1e293b;
+}
+
+.btn-save-all {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background-color: #1d4ed8;
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.btn-save-all:hover {
+  background-color: #1e40af;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .settings-top-row, .settings-bottom-row {
+    grid-template-columns: 1fr;
+  }
+  
+  .profile-content {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .profile-form-section {
+    width: 100%;
+  }
+  
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+}
